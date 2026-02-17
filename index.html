@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LEX PREMIUM | Hukuk & Danışmanlık</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #B8963E; --gold-light: #D4AF6A;
+  --navy: #0A1628; --navy-mid: #142240; --navy-light: #1E3360;
+  --silver: #C0C8D4; --white: #FFFFFF; --bg: #060E1E;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--white); overflow-x:hidden; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--navy); }
+::-webkit-scrollbar-thumb { background:var(--gold); }
+
+/* CURSOR — desktop only */
+@media (pointer:fine) {
+  body { cursor:none; }
+  .cursor { width:10px;height:10px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s; }
+  .cursor-ring { width:36px;height:36px;border:1px solid var(--gold-light);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:.18s ease,width .3s,height .3s,opacity .3s;opacity:.6; }
+}
+@media (pointer:coarse) { .cursor,.cursor-ring { display:none; } }
+
+/* ANNOUNCE */
+.announce-bar { background:var(--gold);color:var(--navy);text-align:center;padding:10px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase; }
+.announce-bar a { color:var(--navy);text-decoration:underline; }
+
+/* NAVBAR */
+nav { position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:76px;background:rgba(6,14,30,.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(184,150,62,.2);transition:all .4s; }
+nav.scrolled { height:62px; }
+.nav-logo { font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:4px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px; }
+.nav-logo span { color:var(--white);font-weight:300; }
+.nav-logo::before { content:'⚖';font-size:20px;color:var(--gold); }
+.nav-links { display:flex;align-items:center;gap:32px;list-style:none; }
+.nav-links a { font-size:10px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--silver);text-decoration:none;transition:color .3s;position:relative; }
+.nav-links a::after { content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s; }
+.nav-links a:hover { color:var(--gold); }
+.nav-links a:hover::after { transform:scaleX(1); }
+.nav-cta { padding:11px 24px;border:1px solid var(--gold);color:var(--gold)!important;font-size:10px!important;transition:all .3s!important; }
+.nav-cta:hover { background:var(--gold)!important;color:var(--navy)!important; }
+.nav-cta::after { display:none!important; }
+
+/* HAMBURGER */
+.hamburger { display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1100; }
+.hamburger span { display:block;width:26px;height:2px;background:var(--gold);transition:all .3s; }
+.hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity:0; }
+.hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* MOBILE MENU */
+.mobile-menu { display:none;position:fixed;inset:0;background:rgba(6,14,30,.98);backdrop-filter:blur(20px);z-index:1050;flex-direction:column;align-items:center;justify-content:center;gap:32px; }
+.mobile-menu.open { display:flex;animation:fadeIn .3s ease; }
+.mobile-menu a { font-size:22px;font-family:'Cormorant Garamond',serif;font-weight:300;letter-spacing:3px;color:var(--white);text-decoration:none;transition:color .3s; }
+.mobile-menu a:hover { color:var(--gold); }
+.mobile-menu .mob-cta { padding:16px 48px;border:1px solid var(--gold);color:var(--gold)!important;font-size:13px!important;font-family:'Montserrat',sans-serif;letter-spacing:2px;text-transform:uppercase;margin-top:8px; }
+
+/* HERO */
+.hero { min-height:100vh;position:relative;display:flex;align-items:center;overflow:hidden; }
+.hero-bg { position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(184,150,62,.07) 0%,transparent 60%),linear-gradient(135deg,#060E1E 0%,#0A1628 40%,#0D1F3C 100%); }
+.hero-lines { position:absolute;inset:0;background-image:linear-gradient(rgba(184,150,62,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(184,150,62,.04) 1px,transparent 1px);background-size:80px 80px; }
+.hero-content { position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:110px 48px 80px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;width:100%; }
+.hero-tag { display:inline-flex;align-items:center;gap:12px;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:28px;padding:8px 20px;border:1px solid rgba(184,150,62,.3); }
+.hero-tag::before { content:'';width:28px;height:1px;background:var(--gold); }
+.hero-h1 { font-family:'Cormorant Garamond',serif;font-size:clamp(44px,5.5vw,82px);font-weight:300;line-height:1.05;margin-bottom:24px; }
+.hero-h1 em { font-style:italic;color:var(--gold); }
+.hero-desc { font-size:14px;line-height:1.9;color:var(--silver);max-width:460px;margin-bottom:44px;font-weight:300; }
+.hero-btns { display:flex;gap:16px;align-items:center;flex-wrap:wrap; }
+.btn-gold { padding:16px 40px;background:var(--gold);color:var(--navy);font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;display:inline-block;transition:all .3s;cursor:pointer;border:none;font-family:'Montserrat',sans-serif; }
+.btn-gold:hover { background:var(--gold-light); }
+.btn-outline { padding:16px 40px;background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.2);font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;display:inline-block;transition:all .3s; }
+.btn-outline:hover { border-color:var(--gold);color:var(--gold); }
+.hero-stats { display:grid;grid-template-columns:1fr 1fr;gap:2px;border:1px solid rgba(184,150,62,.2);padding:2px;background:rgba(184,150,62,.05); }
+.stat-item { padding:32px 24px;background:rgba(10,22,40,.8);text-align:center;transition:background .3s; }
+.stat-item:hover { background:rgba(184,150,62,.08); }
+.stat-number { font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--gold);line-height:1;display:block;margin-bottom:6px; }
+.stat-label { font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--silver); }
+.hero-badge { padding:18px 24px;background:rgba(184,150,62,.06);border:1px solid rgba(184,150,62,.2);border-left:3px solid var(--gold);font-size:13px;color:var(--silver);line-height:1.7;font-style:italic;font-family:'Cormorant Garamond',serif;margin-top:20px; }
+
+/* SECTION HELPERS */
+.sec-wrap { padding:88px 48px;max-width:1400px;margin:0 auto; }
+.sec-full { padding:88px 0; }
+.sec-inner { max-width:1400px;margin:0 auto;padding:0 48px; }
+.sec-label { font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block; }
+.sec-title { font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,54px);font-weight:300;line-height:1.1;margin-bottom:18px; }
+.sec-title em { font-style:italic;color:var(--gold); }
+.sec-sub { font-size:14px;color:var(--silver);line-height:1.85;max-width:540px;font-weight:300;margin-bottom:52px; }
+
+/* PRACTICE */
+.practice-section { background:linear-gradient(180deg,var(--bg) 0%,#080F1F 50%,var(--bg) 100%);border-top:1px solid rgba(184,150,62,.08); }
+.practice-header { display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:20px;flex-wrap:wrap; }
+.practice-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:rgba(184,150,62,.1);border:1px solid rgba(184,150,62,.1); }
+.practice-card { background:var(--navy);padding:34px 26px 24px;position:relative;overflow:hidden;transition:background .4s;display:flex;flex-direction:column;min-height:280px; }
+.practice-card::before { content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform .4s; }
+.practice-card:hover { background:var(--navy-light); }
+.practice-card:hover::before { transform:scaleX(1); }
+.pc-icon { font-size:32px;margin-bottom:16px;display:block;transition:transform .3s; }
+.practice-card:hover .pc-icon { transform:scale(1.1); }
+.pc-title { font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--white);margin-bottom:10px;line-height:1.2; }
+.pc-desc { font-size:12px;color:var(--silver);line-height:1.7;font-weight:300;flex:1; }
+.pc-footer { margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap; }
+.pc-count { font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px; }
+.pc-count::before { content:'';width:14px;height:1px;background:var(--gold); }
+.btn-cat { padding:8px 16px;background:transparent;border:1px solid rgba(184,150,62,.45);color:var(--gold);font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .3s;white-space:nowrap; }
+.btn-cat:hover { background:var(--gold);color:var(--navy);border-color:var(--gold); }
+
+/* WHY US */
+.whyus-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(184,150,62,.08);border:1px solid rgba(184,150,62,.15); }
+.why-item { background:#060E1E;padding:44px 32px;position:relative;overflow:hidden;transition:background .4s; }
+.why-item:hover { background:rgba(14,30,60,.9); }
+.why-num { font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:300;color:rgba(184,150,62,.1);position:absolute;top:14px;right:20px;line-height:1; }
+.why-icon { width:50px;height:50px;border:1px solid rgba(184,150,62,.4);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:22px;transition:all .3s; }
+.why-item:hover .why-icon { background:var(--gold);border-color:var(--gold); }
+.why-item h3 { font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;margin-bottom:14px; }
+.why-item p { font-size:13px;color:var(--silver);line-height:1.8; }
+
+/* PROCESS */
+.process-steps { display:grid;grid-template-columns:repeat(5,1fr);margin-top:56px;position:relative; }
+.process-steps::before { content:'';position:absolute;top:31px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent); }
+.ps-item { display:flex;flex-direction:column;align-items:center;padding:0 16px;position:relative;z-index:1; }
+.ps-num { width:62px;height:62px;background:var(--navy);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);margin-bottom:20px;position:relative; }
+.ps-num::before { content:'';position:absolute;inset:-4px;border:1px solid rgba(184,150,62,.2); }
+.ps-item h4 { font-size:13px;font-weight:600;margin-bottom:10px;text-align:center; }
+.ps-item p { font-size:11px;color:var(--silver);line-height:1.7;text-align:center; }
+
+/* TEAM */
+.team-content { display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:1; }
+.team-number { font-family:'Cormorant Garamond',serif;font-size:150px;font-weight:300;color:rgba(184,150,62,.07);position:absolute;top:-10px;right:0;line-height:1;pointer-events:none; }
+.team-features { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,150,62,.15);margin-top:36px; }
+.tf-item { background:var(--navy);padding:24px 20px;transition:background .3s; }
+.tf-item:hover { background:rgba(184,150,62,.08); }
+.tf-item h4 { font-size:13px;font-weight:600;margin-bottom:6px; }
+.tf-item p { font-size:12px;color:var(--silver);line-height:1.6; }
+.team-card-main { background:linear-gradient(135deg,var(--navy-mid) 0%,var(--navy-light) 100%);border:1px solid rgba(184,150,62,.2);padding:44px;position:relative;overflow:hidden; }
+.team-card-main::before { content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-light)); }
+.team-avukat-sayisi { font-family:'Cormorant Garamond',serif;font-size:88px;font-weight:300;color:var(--gold);line-height:1;display:block;margin-bottom:4px; }
+.team-avukat-label { font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--silver);margin-bottom:28px;display:block; }
+.expertise-list { display:flex;flex-wrap:wrap;gap:8px; }
+.exp-tag { padding:5px 14px;border:1px solid rgba(184,150,62,.3);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-light);transition:all .3s; }
+.exp-tag:hover { background:var(--gold);color:var(--navy);border-color:var(--gold); }
+
+/* TESTIMONIALS */
+.testimonials-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(184,150,62,.08);border:1px solid rgba(184,150,62,.12); }
+.testi-card { background:var(--navy);padding:36px 28px;transition:background .3s; }
+.testi-card:hover { background:rgba(20,34,64,.95); }
+.testi-quote { font-size:50px;color:var(--gold);font-family:'Cormorant Garamond',serif;line-height:.6;margin-bottom:18px;display:block; }
+.testi-text { font-size:15px;color:var(--silver);line-height:1.8;font-style:italic;font-family:'Cormorant Garamond',serif;margin-bottom:24px; }
+.testi-stars { color:var(--gold);font-size:12px;margin-bottom:14px;letter-spacing:2px; }
+.testi-author h5 { font-size:13px;font-weight:600; }
+.testi-author span { font-size:10px;color:var(--gold);letter-spacing:1px; }
+
+/* CONTACT */
+.contact-section { background:linear-gradient(135deg,var(--navy-mid) 0%,var(--bg) 100%);border-top:1px solid rgba(184,150,62,.15); }
+.contact-inner { max-width:1400px;margin:0 auto;padding:88px 48px;display:grid;grid-template-columns:1fr 1.2fr;gap:72px; }
+.contact-left p { font-size:14px;color:var(--silver);line-height:1.9;margin-bottom:36px;font-weight:300; }
+.ci-items { display:flex;flex-direction:column;gap:14px; }
+.ci-item { display:flex;align-items:center;gap:14px;padding:16px;border:1px solid rgba(184,150,62,.15);background:rgba(184,150,62,.03);transition:all .3s; }
+.ci-item:hover { border-color:rgba(184,150,62,.4);background:rgba(184,150,62,.07); }
+.ci-icon { font-size:18px;color:var(--gold);width:26px;text-align:center; }
+.ci-text h5 { font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:3px; }
+.ci-text span { font-size:13px;color:var(--silver); }
+
+/* FORMS */
+.request-form { background:rgba(10,22,40,.6);border:1px solid rgba(184,150,62,.2);padding:44px;position:relative;overflow:hidden; }
+.request-form::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold)); }
+.form-title { font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:6px; }
+.form-subtitle { font-size:11px;color:var(--silver);letter-spacing:1px;margin-bottom:28px; }
+.form-row { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px; }
+.form-group { display:flex;flex-direction:column;margin-bottom:12px; }
+.form-group label { font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:7px; }
+.form-group input,.form-group select,.form-group textarea { background:rgba(255,255,255,.04);border:1px solid rgba(184,150,62,.2);color:var(--white);padding:13px 14px;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;transition:border-color .3s,background .3s;width:100%;-webkit-appearance:none;appearance:none;border-radius:0; }
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--gold);background:rgba(184,150,62,.05); }
+.form-group select option { background:var(--navy);color:var(--white); }
+.form-group textarea { height:110px;resize:vertical; }
+::placeholder { color:rgba(255,255,255,.22);font-size:12px; }
+.form-check { display:flex;align-items:flex-start;gap:12px;margin-bottom:22px; }
+.form-check input[type="checkbox"] { width:16px;height:16px;flex-shrink:0;margin-top:2px;cursor:pointer;accent-color:var(--gold); }
+.form-check label { font-size:11px;color:var(--silver);line-height:1.6;cursor:pointer; }
+.form-check a { color:var(--gold);text-decoration:none; }
+.form-submit { width:100%;padding:17px;background:var(--gold);border:none;color:var(--navy);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;font-family:'Montserrat',sans-serif; }
+.form-submit:hover { background:var(--gold-light);letter-spacing:3.5px; }
+.success-msg { display:none;text-align:center;padding:40px 20px; }
+.success-msg.show { display:block; }
+.success-icon { font-size:52px;margin-bottom:14px; }
+.success-msg h3 { font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);margin-bottom:10px; }
+.success-msg p { font-size:13px;color:var(--silver);line-height:1.8; }
+
+/* MODAL */
+.modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9000;align-items:flex-start;justify-content:center;padding:20px;backdrop-filter:blur(8px);overflow-y:auto; }
+.modal-overlay.open { display:flex;animation:fadeIn .2s ease; }
+.modal-box { background:var(--navy);border:1px solid rgba(184,150,62,.3);width:100%;max-width:620px;position:relative;animation:modalIn .35s cubic-bezier(.34,1.4,.64,1);margin:auto;flex-shrink:0; }
+@keyframes modalIn { from { transform:scale(.88) translateY(30px);opacity:0; } to { transform:scale(1) translateY(0);opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.modal-top-bar { height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold)); }
+.modal-header { padding:28px 32px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px; }
+.modal-icon-row { display:flex;align-items:center;gap:12px;margin-bottom:8px; }
+.micon { font-size:26px; }
+.mbadge { font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:5px 14px;border:1px solid rgba(184,150,62,.35); }
+.modal-title { font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;margin-bottom:4px; }
+.modal-sub-text { font-size:11px;color:var(--silver); }
+.modal-close { background:none;border:1px solid rgba(184,150,62,.3);color:var(--silver);font-size:16px;cursor:pointer;transition:all .2s;padding:7px 11px;line-height:1;flex-shrink:0; }
+.modal-close:hover { background:rgba(184,150,62,.15);color:var(--gold);border-color:var(--gold); }
+.modal-body { padding:24px 32px 32px; }
+.modal-divider { height:1px;background:rgba(184,150,62,.15);margin:18px 0; }
+.modal-sec-title { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px; }
+.fg-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+.radio-group { display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px; }
+.radio-opt { display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid rgba(184,150,62,.2);cursor:pointer;transition:all .25s;font-size:12px;color:var(--silver); }
+.radio-opt input[type="radio"] { accent-color:var(--gold);flex-shrink:0; }
+.radio-opt:has(input:checked) { border-color:var(--gold);background:rgba(184,150,62,.08);color:var(--white); }
+.radio-opt:hover { border-color:rgba(184,150,62,.5); }
+.modal-error { background:rgba(220,50,50,.15);border:1px solid rgba(220,50,50,.4);color:#ff8080;padding:11px 14px;font-size:11px;margin-bottom:14px; }
+
+/* FOOTER */
+footer { background:var(--navy);border-top:1px solid rgba(184,150,62,.2); }
+.footer-main { max-width:1400px;margin:0 auto;padding:72px 48px 52px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px; }
+.footer-brand h2 { font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold);letter-spacing:3px;margin-bottom:14px; }
+.footer-brand p { font-size:12px;color:var(--silver);line-height:1.8;margin-bottom:24px;max-width:290px; }
+.footer-socials { display:flex;gap:10px; }
+.soc-btn { width:38px;height:38px;border:1px solid rgba(184,150,62,.3);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--silver);text-decoration:none;transition:all .3s; }
+.soc-btn:hover { background:var(--gold);color:var(--navy);border-color:var(--gold); }
+.footer-col h4 { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid rgba(184,150,62,.2); }
+.footer-col ul { list-style:none;display:flex;flex-direction:column;gap:9px; }
+.footer-col ul li a { font-size:12px;color:var(--silver);text-decoration:none;transition:color .3s;display:flex;align-items:center;gap:7px; }
+.footer-col ul li a::before { content:'›';color:var(--gold); }
+.footer-col ul li a:hover { color:var(--gold); }
+.footer-bottom { max-width:1400px;margin:0 auto;padding:20px 48px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(184,150,62,.1);font-size:11px;color:rgba(255,255,255,.3);flex-wrap:wrap;gap:10px; }
+.footer-bottom span { color:var(--gold); }
+.footer-bottom a { color:rgba(255,255,255,.3);text-decoration:none;margin-left:16px;transition:color .3s; }
+.footer-bottom a:hover { color:var(--gold); }
+
+/* FLOAT */
+.float-badge { position:fixed;bottom:28px;right:28px;background:var(--gold);color:var(--navy);padding:13px 22px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;z-index:800;transition:all .3s;box-shadow:0 8px 28px rgba(184,150,62,.4);text-decoration:none;display:flex;align-items:center;gap:8px; }
+.float-badge:hover { background:var(--gold-light);transform:translateY(-3px);box-shadow:0 12px 36px rgba(184,150,62,.5); }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width:1100px) { .practice-grid { grid-template-columns:repeat(3,1fr); } .footer-main { grid-template-columns:1fr 1fr;gap:36px; } }
+@media (max-width:960px) {
+  .hero-content { grid-template-columns:1fr;gap:40px;padding:96px 32px 64px; }
+  .hero-stats { grid-template-columns:repeat(4,1fr); }
+  .team-content { grid-template-columns:1fr;gap:40px; }
+  .team-number { display:none; }
+  .contact-inner { grid-template-columns:1fr;padding:72px 32px; }
+  .whyus-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:720px) {
+  .announce-bar { font-size:9px;letter-spacing:.5px;padding:9px 12px; }
+  nav { padding:0 20px;height:68px; }
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+  .hero-content { padding:84px 20px 52px;gap:28px; }
+  .hero-h1 { font-size:36px; }
+  .hero-desc { font-size:13px;margin-bottom:28px; }
+  .hero-btns { flex-direction:column;align-items:flex-start;gap:12px; }
+  .btn-gold,.btn-outline { width:100%;text-align:center;padding:14px 24px; }
+  .hero-stats { grid-template-columns:1fr 1fr; }
+  .stat-number { font-size:36px; }
+  .stat-item { padding:20px 14px; }
+  .sec-wrap { padding:60px 20px; }
+  .sec-inner { padding:0 20px; }
+  .sec-full { padding:60px 0; }
+  .practice-grid { grid-template-columns:1fr;gap:2px; }
+  .practice-section .sec-inner { padding:0 20px; }
+  .practice-header { flex-direction:column;align-items:flex-start;margin-bottom:24px; }
+  .pc-footer { flex-direction:column;align-items:flex-start;gap:10px; }
+  .btn-cat { width:100%;text-align:center;padding:11px; }
+  .whyus-grid { grid-template-columns:1fr; }
+  .process-steps { grid-template-columns:1fr;gap:24px; }
+  .process-steps::before { display:none; }
+  .ps-item { flex-direction:row;gap:18px;padding:0;align-items:flex-start; }
+  .ps-num { flex-shrink:0;width:50px;height:50px;font-size:20px;margin-bottom:0; }
+  .ps-item h4,.ps-item p { text-align:left; }
+  .testimonials-grid { grid-template-columns:1fr; }
+  .team-features { grid-template-columns:1fr; }
+  .team-card-main { padding:26px; }
+  .team-avukat-sayisi { font-size:64px; }
+  .footer-main { grid-template-columns:1fr;gap:32px;padding:52px 20px 36px; }
+  .footer-bottom { flex-direction:column;text-align:center;padding:18px 20px; }
+  .footer-bottom a { margin-left:8px; }
+  .float-badge { bottom:16px;right:16px;padding:11px 16px;font-size:10px; }
+  .contact-inner { padding:60px 20px;gap:40px; }
+  .request-form { padding:24px 18px; }
+  .form-row { grid-template-columns:1fr; }
+  /* Modal mobile */
+  .modal-overlay { padding:12px; }
+  .modal-header { padding:20px 20px 0; }
+  .modal-body { padding:18px 20px 24px; }
+  .modal-title { font-size:22px; }
+  .fg-grid { grid-template-columns:1fr; }
+  .radio-group { gap:7px; }
+}
+@media (max-width:400px) { .hero-h1 { font-size:30px; } .sec-title { font-size:26px; } }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="announce-bar">🏛 150 Uzman Avukat — Ücretsiz İlk Danışma için <a href="#iletisim">Hemen Talep Bırakın</a></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#">LEX <span>PREMIUM</span></a>
+  <ul class="nav-links">
+    <li><a href="#hizmetler">Hizmetler</a></li>
+    <li><a href="#ekip">Ekibimiz</a></li>
+    <li><a href="#neden">Neden Biz</a></li>
+    <li><a href="#surec">Süreç</a></li>
+    <li><a href="#yorumlar">Referanslar</a></li>
+    <li><a href="#iletisim" class="nav-cta">Talep Bırak</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hizmetler" onclick="toggleMenu()">Hizmetler</a>
+  <a href="#ekip" onclick="toggleMenu()">Ekibimiz</a>
+  <a href="#neden" onclick="toggleMenu()">Neden Biz</a>
+  <a href="#surec" onclick="toggleMenu()">Süreç</a>
+  <a href="#yorumlar" onclick="toggleMenu()">Referanslar</a>
+  <a href="#iletisim" class="mob-cta" onclick="toggleMenu()">📋 Talep Bırak</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="anasayfa">
+  <div class="hero-bg"></div><div class="hero-lines"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-tag">Türkiye'nin Köklü Hukuk Firması</div>
+      <h1 class="hero-h1">Hakkınızı<br><em>Kararlılıkla</em><br>Savunuyoruz</h1>
+      <p class="hero-desc">1998'den bu yana 150'den fazla uzman avukat ve danışmanımızla her hukuki alanda yanınızdayız.</p>
+      <div class="hero-btns">
+        <a href="#iletisim" class="btn-gold">Ücretsiz Danışma Al</a>
+        <a href="#hizmetler" class="btn-outline">Hizmetlerimiz</a>
+      </div>
+    </div>
+    <div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-number" data-target="150">0</span><span class="stat-label">Uzman Avukat</span></div>
+        <div class="stat-item"><span class="stat-number" data-target="26">0</span><span class="stat-label">Yıl Deneyim</span></div>
+        <div class="stat-item"><span class="stat-number" data-target="12400">0</span><span class="stat-label">Çözülen Dava</span></div>
+        <div class="stat-item"><span class="stat-number" data-target="98">0</span><span class="stat-label">% Başarı Oranı</span></div>
+      </div>
+      <div class="hero-badge">"Adalet yalnızca yapılmış olmamalı, yapıldığı açıkça görülmesi de gerekir." — Lord Hewart</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE AREAS -->
+<div class="practice-section sec-full" id="hizmetler">
+  <div class="sec-inner">
+    <div class="practice-header">
+      <div>
+        <span class="sec-label">Uygulama Alanları</span>
+        <h2 class="sec-title">Her Hukuk Dalında <em>Uzman Kadro</em></h2>
+      </div>
+    </div>
+    <div class="practice-grid">
+
+      <div class="practice-card">
+        <span class="pc-icon">⚖️</span>
+        <h3 class="pc-title">Ceza Hukuku</h3>
+        <p class="pc-desc">Ağır ceza, asliye ceza davalarında savunma, beraat, tahliye ve itiraz süreçlerinde güçlü temsil.</p>
+        <div class="pc-footer"><div class="pc-count">18 Uzman Avukat</div><button class="btn-cat" onclick="openModal('ceza')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">🏢</span>
+        <h3 class="pc-title">Ticaret & Şirketler Hukuku</h3>
+        <p class="pc-desc">Şirket kuruluşu, birleşme-devralma, ticari sözleşmeler, anonim şirket uyuşmazlıkları.</p>
+        <div class="pc-footer"><div class="pc-count">22 Uzman Avukat</div><button class="btn-cat" onclick="openModal('ticaret')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">👨‍👩‍👧</span>
+        <h3 class="pc-title">Aile Hukuku</h3>
+        <p class="pc-desc">Boşanma, velayet, nafaka, mal paylaşımı, evlat edinme ve aile içi şiddet davalarında destek.</p>
+        <div class="pc-footer"><div class="pc-count">14 Uzman Avukat</div><button class="btn-cat" onclick="openModal('aile')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">🏠</span>
+        <h3 class="pc-title">Gayrimenkul & Tapu Hukuku</h3>
+        <p class="pc-desc">Tapu iptali, kadastro, imar uyuşmazlıkları, kira hukuku, kat mülkiyeti ve müteahhit davaları.</p>
+        <div class="pc-footer"><div class="pc-count">16 Uzman Avukat</div><button class="btn-cat" onclick="openModal('gayrimenkul')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">👷</span>
+        <h3 class="pc-title">İş & Sosyal Güvenlik Hukuku</h3>
+        <p class="pc-desc">İşe iade, kıdem tazminatı, mobbing, iş kazası, SGK uyuşmazlıkları ve toplu iş sözleşmeleri.</p>
+        <div class="pc-footer"><div class="pc-count">15 Uzman Avukat</div><button class="btn-cat" onclick="openModal('is')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">📋</span>
+        <h3 class="pc-title">İdare & Vergi Hukuku</h3>
+        <p class="pc-desc">İdari itiraz, vergi kaçakçılığı savunması, vergi cezaları, ihale hukuku ve kamu alacakları.</p>
+        <div class="pc-footer"><div class="pc-count">12 Uzman Avukat</div><button class="btn-cat" onclick="openModal('idare')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">💻</span>
+        <h3 class="pc-title">Bilişim & Siber Hukuku</h3>
+        <p class="pc-desc">KVKK ihlalleri, siber suçlar, veri ihlali savunması, e-ticaret hukuku ve dijital haklarınız.</p>
+        <div class="pc-footer"><div class="pc-count">9 Uzman Avukat</div><button class="btn-cat" onclick="openModal('bilisim')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">🚗</span>
+        <h3 class="pc-title">Trafik & Sigorta Hukuku</h3>
+        <p class="pc-desc">Trafik kazası tazminatı, sigorta şirketi uyuşmazlıkları, kasko reddi ve beden zararı davaları.</p>
+        <div class="pc-footer"><div class="pc-count">10 Uzman Avukat</div><button class="btn-cat" onclick="openModal('trafik')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">🌍</span>
+        <h3 class="pc-title">Uluslararası Tahkim</h3>
+        <p class="pc-desc">ICC, ICSID, UNCITRAL tahkim süreçleri, milletlerarası ticari uyuşmazlıklar ve yabancı mahkeme kararları.</p>
+        <div class="pc-footer"><div class="pc-count">8 Uzman Avukat</div><button class="btn-cat" onclick="openModal('tahkim')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">💡</span>
+        <h3 class="pc-title">Fikri Mülkiyet Hukuku</h3>
+        <p class="pc-desc">Patent, marka, telif hakkı, endüstriyel tasarım tescili ve fikri hak ihlali davalarında koruma.</p>
+        <div class="pc-footer"><div class="pc-count">7 Uzman Avukat</div><button class="btn-cat" onclick="openModal('fikri')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">⚡</span>
+        <h3 class="pc-title">Enerji & Çevre Hukuku</h3>
+        <p class="pc-desc">Enerji lisansları, çevre mevzuatı uyumu, yenilenebilir enerji projeleri ve çevre cezaları.</p>
+        <div class="pc-footer"><div class="pc-count">6 Uzman Avukat</div><button class="btn-cat" onclick="openModal('enerji')">Talep Bırak →</button></div>
+      </div>
+
+      <div class="practice-card">
+        <span class="pc-icon">🏦</span>
+        <h3 class="pc-title">Banka & Finans Hukuku</h3>
+        <p class="pc-desc">Banka kredisi uyuşmazlıkları, yeniden yapılandırma, finansal düzenleme ve iflas hukuku.</p>
+        <div class="pc-footer"><div class="pc-count">13 Uzman Avukat</div><button class="btn-cat" onclick="openModal('banka')">Talep Bırak →</button></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="sec-full" id="ekip" style="background:rgba(184,150,62,.03);border-top:1px solid rgba(184,150,62,.1);border-bottom:1px solid rgba(184,150,62,.1);">
+  <div class="sec-inner" style="position:relative;overflow:hidden;">
+    <div class="team-number">150</div>
+    <div class="team-content">
+      <div>
+        <span class="sec-label">Hukuk Kadromuz</span>
+        <h2 class="sec-title">150 Uzman<br><em>Tek Çatı Altında</em></h2>
+        <p class="sec-sub">Türkiye'nin dört bir yanından ve uluslararası arenadan seçilmiş, alanında uzmanlaşmış 150 avukat ve danışmanımız her davada en güçlü savunmayı sunar.</p>
+        <div class="team-features">
+          <div class="tf-item"><h4>🎓 Akademik Kadro</h4><p>Öğretim üyesi düzeyinde hukuk danışmanları</p></div>
+          <div class="tf-item"><h4>🌐 Uluslararası Ağ</h4><p>40+ ülkede iş ortağı hukuk bürosu</p></div>
+          <div class="tf-item"><h4>⚡ 24/7 Erişim</h4><p>Acil hukuki destek için her an ulaşın</p></div>
+          <div class="tf-item"><h4>🔒 Gizlilik</h4><p>Mutlak avukat-müvekkil gizliliği güvencesi</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="team-card-main">
+          <span class="team-avukat-sayisi">150</span>
+          <span class="team-avukat-label">Uzman Avukat & Danışman</span>
+          <div class="expertise-list">
+            <span class="exp-tag">Ceza Hukuku</span><span class="exp-tag">Ticaret Hukuku</span>
+            <span class="exp-tag">Aile Hukuku</span><span class="exp-tag">İş Hukuku</span>
+            <span class="exp-tag">Gayrimenkul</span><span class="exp-tag">Vergi Hukuku</span>
+            <span class="exp-tag">Bilişim Hukuku</span><span class="exp-tag">Tahkim</span>
+            <span class="exp-tag">Sigorta Hukuku</span><span class="exp-tag">Fikri Mülkiyet</span>
+            <span class="exp-tag">İdare Hukuku</span><span class="exp-tag">Finans Hukuku</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<div class="sec-full" id="neden" style="background:linear-gradient(180deg,var(--bg) 0%,#080F1F 100%);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="sec-label">Üstün Değerlerimiz</span>
+      <h2 class="sec-title">Neden <em>LEX PREMIUM</em>?</h2>
+    </div>
+    <div class="whyus-grid">
+      <div class="why-item"><div class="why-num">01</div><div class="why-icon">🏆</div><h3>Kanıtlanmış Başarı</h3><p>26 yıllık deneyimimizde %98 başarı oranıyla 12.400+ davayı müvekkillerimiz lehine sonuçlandırdık.</p></div>
+      <div class="why-item"><div class="why-num">02</div><div class="why-icon">🎯</div><h3>Uzmanlaşmış Ekip</h3><p>Her hukuk dalında kendi alanında uzmanlaşmış avukatlarımız ile gerçek uzmanlık sunuyoruz.</p></div>
+      <div class="why-item"><div class="why-num">03</div><div class="why-icon">📞</div><h3>Şeffaf İletişim</h3><p>Dava sürecinizin her adımında bilgi verir, süreçleri basit ve anlaşılır şekilde aktarırız.</p></div>
+      <div class="why-item"><div class="why-num">04</div><div class="why-icon">💰</div><h3>Adil Ücretlendirme</h3><p>Ücret politikamız tamamen şeffaftır. Gizli maliyet yok, sonradan sürpriz ek ücret talep etmeyiz.</p></div>
+      <div class="why-item"><div class="why-num">05</div><div class="why-icon">🌐</div><h3>Ulusal & Uluslararası Ağ</h3><p>Türkiye'nin her ilinde ve 40+ ülkede iş ortaklığı ağımızla sınır ötesi davalarda da güçlü temsil.</p></div>
+      <div class="why-item"><div class="why-num">06</div><div class="why-icon">🔐</div><h3>Mutlak Gizlilik</h3><p>Avukat-müvekkil gizliliği ilkemiz en temel değerimizdir. Bilgileriniz hiçbir koşulda paylaşılmaz.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="sec-full" id="surec" style="background:var(--bg);border-top:1px solid rgba(184,150,62,.08);">
+  <div class="sec-inner" style="text-align:center;">
+    <span class="sec-label">Nasıl Çalışıyoruz</span>
+    <h2 class="sec-title">Danışma <em>Sürecimiz</em></h2>
+    <p class="sec-sub" style="margin:0 auto;text-align:center;">Talebinizden çözüme kadar 5 adımda şeffaf ve güvenilir hukuki destek</p>
+    <div class="process-steps">
+      <div class="ps-item"><div class="ps-num">1</div><div><h4>Talep Bırakın</h4><p>Formu doldurun veya bizi arayın. İlk görüşme ücretsizdir.</p></div></div>
+      <div class="ps-item"><div class="ps-num">2</div><div><h4>Durum Analizi</h4><p>Uzman avukatımız davanızı detaylı değerlendirir.</p></div></div>
+      <div class="ps-item"><div class="ps-num">3</div><div><h4>Strateji Planı</h4><p>Dava stratejisi ve maliyet planı hazırlanır.</p></div></div>
+      <div class="ps-item"><div class="ps-num">4</div><div><h4>Hukuki Süreç</h4><p>Tüm süreçler eksiksiz yürütülür.</p></div></div>
+      <div class="ps-item"><div class="ps-num">5</div><div><h4>Sonuç & Takip</h4><p>Karar sonrası icra ve temyiz de takip edilir.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="sec-full" id="yorumlar" style="background:rgba(184,150,62,.02);border-top:1px solid rgba(184,150,62,.08);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="sec-label">Müvekkil Yorumları</span>
+      <h2 class="sec-title">Güvenen <em>Müvekkiller</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card"><span class="testi-quote">"</span><p class="testi-text">İş hukuku alanında çok karmaşık bir davamı başarıyla sonuçlandırdılar. Süreç boyunca her aşamada bilgilendirildim.</p><div class="testi-stars">★★★★★</div><div class="testi-author"><h5>Ahmet Yılmaz</h5><span>Holding CEO'su — İstanbul</span></div></div>
+      <div class="testi-card"><span class="testi-quote">"</span><p class="testi-text">Boşanma davamda hem hukuki hem insani destek aldım. Çocuklarımın velayetini kazanmamda büyük katkıları oldu.</p><div class="testi-stars">★★★★★</div><div class="testi-author"><h5>Selin Kaya</h5><span>Öğretmen — Ankara</span></div></div>
+      <div class="testi-card"><span class="testi-quote">"</span><p class="testi-text">Uluslararası tahkim sürecimizde gösterdikleri uzmanlık olağanüstüydü. Yabancı ortaklarla olan anlaşmazlığımız lehimize kapandı.</p><div class="testi-stars">★★★★★</div><div class="testi-author"><h5>Murat Demir</h5><span>İhracatçı — İzmir</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="iletisim">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <span class="sec-label">İletişim & Talep</span>
+      <h2 class="sec-title">Hukuki Desteğe<br><em>Hemen Başlayın</em></h2>
+      <p>İlk danışma görüşmesi tamamen ücretsizdir. Formdan talebinizi bırakın, 24 saat içinde uzman avukatımız sizi arasın.</p>
+      <div class="ci-items">
+        <div class="ci-item"><div class="ci-icon">📍</div><div class="ci-text"><h5>Adres</h5><span>Levent Mah., Büyükdere Cad. No:185, Şişli / İstanbul</span></div></div>
+        <div class="ci-item"><div class="ci-icon">📞</div><div class="ci-text"><h5>Telefon</h5><span>+90 (212) 555 00 00 | 7/24 Acil Hat</span></div></div>
+        <div class="ci-item"><div class="ci-icon">✉️</div><div class="ci-text"><h5>E-posta</h5><span>info@lexpremium.com.tr</span></div></div>
+        <div class="ci-item"><div class="ci-icon">⏰</div><div class="ci-text"><h5>Çalışma Saatleri</h5><span>Hft İçi 09:00–20:00 | Cmt 10:00–16:00</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="request-form">
+        <div id="mainFormContent">
+          <div class="form-title">Genel Talep Formu</div>
+          <p class="form-subtitle">* Zorunlu alanları doldurunuz</p>
+          <div class="form-row">
+            <div class="form-group"><label>Ad *</label><input type="text" id="mfname" placeholder="Adınız"></div>
+            <div class="form-group"><label>Soyad *</label><input type="text" id="mflname" placeholder="Soyadınız"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Telefon *</label><input type="tel" id="mfphone" placeholder="+90 5xx xxx xx xx"></div>
+            <div class="form-group"><label>E-posta *</label><input type="email" id="mfemail" placeholder="ornek@email.com"></div>
+          </div>
+          <div class="form-group"><label>Hukuk Alanı *</label>
+            <select id="mffield"><option value="" disabled selected>Hukuk dalını seçiniz</option>
+              <option>Ceza Hukuku</option><option>Ticaret & Şirketler Hukuku</option>
+              <option>Aile Hukuku</option><option>Gayrimenkul & Tapu Hukuku</option>
+              <option>İş & Sosyal Güvenlik Hukuku</option><option>İdare & Vergi Hukuku</option>
+              <option>Bilişim & Siber Hukuku</option><option>Trafik & Sigorta Hukuku</option>
+              <option>Uluslararası Tahkim</option><option>Fikri Mülkiyet Hukuku</option>
+              <option>Enerji & Çevre Hukuku</option><option>Banka & Finans Hukuku</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Şehir *</label><input type="text" id="mfcity" placeholder="İl / Şehir"></div>
+            <div class="form-group"><label>Görüşme Tercihi</label>
+              <select id="mfmeet"><option value="" disabled selected>Seçiniz</option><option>Yüz Yüze</option><option>Online</option><option>Telefon</option></select>
+            </div>
+          </div>
+          <div class="form-group"><label>Konu Özeti *</label><textarea id="mfmessage" placeholder="Hukuki durumunuzu kısaca açıklayın..."></textarea></div>
+          <div class="form-check"><input type="checkbox" id="mfprivacy"><label for="mfprivacy"><a href="#">Gizlilik politikasını</a> ve <a href="#">KVKK metnini</a> okudum, onaylıyorum.</label></div>
+          <button class="form-submit" onclick="submitMainForm()">⚖ Talep Gönder — Ücretsiz Danışma</button>
+        </div>
+        <div class="success-msg" id="mainSuccess">
+          <div class="success-icon">✅</div>
+          <h3>Talebiniz Alındı!</h3>
+          <p>24 saat içinde uzman avukatımız sizi arayacak.<br><br>Acil: <strong style="color:var(--gold)">+90 (212) 555 00 00</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <h2>⚖ LEX PREMIUM</h2>
+      <p>1998'den bu yana 150 uzman avukat ve danışmanımızla her hukuki alanda güvenilir çözümler sunuyoruz.</p>
+      <div class="footer-socials"><a class="soc-btn" href="#">in</a><a class="soc-btn" href="#">𝕏</a><a class="soc-btn" href="#">📷</a><a class="soc-btn" href="#">▶</a></div>
+    </div>
+    <div class="footer-col"><h4>Hukuk Dalları</h4><ul>
+      <li><a href="#hizmetler">Ceza Hukuku</a></li><li><a href="#hizmetler">Ticaret Hukuku</a></li>
+      <li><a href="#hizmetler">Aile Hukuku</a></li><li><a href="#hizmetler">İş Hukuku</a></li>
+      <li><a href="#hizmetler">Gayrimenkul</a></li><li><a href="#hizmetler">Vergi Hukuku</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Kurumsal</h4><ul>
+      <li><a href="#">Hakkımızda</a></li><li><a href="#ekip">Avukat Kadrosu</a></li>
+      <li><a href="#">Kariyer</a></li><li><a href="#">Blog & Makaleler</a></li><li><a href="#">SSS</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>İletişim</h4><ul>
+      <li><a href="#">📍 Şişli, İstanbul</a></li><li><a href="#">📞 +90 212 555 00 00</a></li>
+      <li><a href="#">✉️ info@lexpremium.com.tr</a></li>
+      <li><a href="#">💼 Ankara Şubesi</a></li><li><a href="#">💼 İzmir Şubesi</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2024 <span>LEX PREMIUM</span> Hukuk Bürosu — Tüm hakları saklıdır.</div>
+    <div><a href="#">Gizlilik</a><a href="#">KVKK</a><a href="#">Çerez Politikası</a></div>
+  </div>
+</footer>
+
+<a href="#iletisim" class="float-badge">📋 Ücretsiz Danışma</a>
+
+<!-- ═══════════ CATEGORY MODAL ═══════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-top-bar"></div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-icon-row">
+          <span class="micon" id="mIcon">⚖️</span>
+          <span class="mbadge" id="mBadge">Hukuk Alanı</span>
+        </div>
+        <div class="modal-title" id="mTitle">Talep Formu</div>
+        <div class="modal-sub-text" id="mSub">Uzman avukatımız 24 saat içinde sizi arayacak</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sec-title">KİŞİSEL BİLGİLER</div>
+      <div class="fg-grid">
+        <div class="form-group"><label>Ad *</label><input type="text" id="m_fname" placeholder="Adınız"></div>
+        <div class="form-group"><label>Soyad *</label><input type="text" id="m_lname" placeholder="Soyadınız"></div>
+        <div class="form-group"><label>Telefon *</label><input type="tel" id="m_phone" placeholder="+90 5xx xxx xx xx"></div>
+        <div class="form-group"><label>E-posta</label><input type="email" id="m_email" placeholder="ornek@email.com"></div>
+        <div class="form-group"><label>Şehir *</label><input type="text" id="m_city" placeholder="İl / Şehir"></div>
+        <div class="form-group"><label>Görüşme Tercihi</label>
+          <select id="m_meet"><option value="" disabled selected>Seçiniz</option><option>Yüz Yüze Görüşme</option><option>Online Görüşme</option><option>Telefon Görüşmesi</option></select>
+        </div>
+      </div>
+      <div class="modal-divider"></div>
+      <div id="mSpecific"></div>
+      <div class="modal-divider"></div>
+      <div class="form-group"><label>Ek Notlar</label><textarea id="m_notes" placeholder="Eklemek istediğiniz bilgiler..."></textarea></div>
+      <div class="form-check"><input type="checkbox" id="m_privacy"><label for="m_privacy"><a href="#">Gizlilik politikası</a> ve <a href="#">KVKK aydınlatma metnini</a> okudum, onaylıyorum.</label></div>
+      <div id="mErrorBox"></div>
+      <button class="form-submit" id="mSubmitBtn" onclick="submitModal()">⚖ Talep Gönder — Ücretsiz Danışma</button>
+      <div class="success-msg" id="mSuccessMsg">
+        <div class="success-icon">✅</div>
+        <h3>Talebiniz Alındı!</h3>
+        <p>Uzman avukatımız <strong>24 saat içinde</strong> sizi arayacak.<br><br>Acil: <strong style="color:var(--gold)">+90 (212) 555 00 00</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* CURSOR */
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+if(cursor&&ring){let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});function ar(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar);}ar();document.querySelectorAll('a,button,.practice-card,.why-item').forEach(el=>{el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px';ring.style.opacity='.25';cursor.style.transform='translate(-50%,-50%) scale(1.5)';});el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';ring.style.opacity='.6';cursor.style.transform='translate(-50%,-50%) scale(1)';});});}
+
+/* NAVBAR */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>50));
+
+/* HAMBURGER */
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileMenu').classList.contains('open')?'hidden':'';}
+
+/* COUNTERS */
+function animCount(el){const t=+el.dataset.target,s=t/(1800/16);let c=0;const ti=setInterval(()=>{c=Math.min(c+s,t);el.textContent=Math.floor(c).toLocaleString('tr-TR');if(c>=t){el.textContent=t.toLocaleString('tr-TR');clearInterval(ti);}},16);}
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animCount(e.target);obs.unobserve(e.target);}}),{threshold:.5});
+document.querySelectorAll('.stat-number[data-target]').forEach(el=>obs.observe(el));
+
+/* SMOOTH SCROLL */
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}}));
+
+/* ═══════════ MODAL DATA ═══════════ */
+const CAT = {
+  ceza:{icon:'⚖️',badge:'Ceza Hukuku',title:'Ceza Hukuku Talep Formu',sub:'18 uzman ceza avukatı — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">DAVA BİLGİLERİ</div>
+    <div class="form-group"><label>Suçlama / Dava Türü *</label>
+      <select><option disabled selected>Seçiniz</option><option>Yaralama / Kasten Öldürme</option><option>Hırsızlık / Dolandırıcılık</option><option>Uyuşturucu Madde</option><option>Cinsel Suçlar</option><option>Terör / Örgütlü Suç</option><option>Bilişim Suçları</option><option>Hakaret / İftira</option><option>Rüşvet / Yolsuzluk</option><option>Diğer</option></select>
+    </div>
+    <div class="form-group"><label>Mevcut Durum *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq1"> Tutuklu</label>
+        <label class="radio-opt"><input type="radio" name="rq1"> Serbest (Şüpheli)</label>
+        <label class="radio-opt"><input type="radio" name="rq1"> Mağdur / Şikayetçi</label>
+        <label class="radio-opt"><input type="radio" name="rq1"> Dava Devam Ediyor</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Mahkeme / Şehir</label><input type="text" placeholder="İlgili mahkeme / şehir"></div>
+      <div class="form-group"><label>Duruşma Tarihi</label><input type="date"></div>
+    </div>`},
+
+  ticaret:{icon:'🏢',badge:'Ticaret Hukuku',title:'Ticaret Hukuku Talep Formu',sub:'22 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">ŞİRKET & KONU BİLGİLERİ</div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Şirket Adı</label><input type="text" placeholder="Şirket unvanı"></div>
+      <div class="form-group"><label>Şirket Türü</label>
+        <select><option disabled selected>Seçiniz</option><option>Limited Şirket</option><option>Anonim Şirket</option><option>Şahıs İşletmesi</option><option>Holding</option><option>Diğer</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Konu *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq2"> Sözleşme Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq2"> Şirket Kuruluşu</label>
+        <label class="radio-opt"><input type="radio" name="rq2"> Birleşme / Devralma</label>
+        <label class="radio-opt"><input type="radio" name="rq2"> Alacak Takibi</label>
+        <label class="radio-opt"><input type="radio" name="rq2"> Ortaklık Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq2"> İflas / Tasfiye</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Uyuşmazlık Tutarı</label>
+      <select><option disabled selected>Seçiniz</option><option>100.000 TL'ye kadar</option><option>100K – 500K TL</option><option>500K – 2M TL</option><option>2M TL üzeri</option></select>
+    </div>`},
+
+  aile:{icon:'👨‍👩‍👧',badge:'Aile Hukuku',title:'Aile Hukuku Talep Formu',sub:'14 uzman avukat — gizli, ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">DAVA TÜRÜ</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq3"> Anlaşmalı Boşanma</label>
+        <label class="radio-opt"><input type="radio" name="rq3"> Çekişmeli Boşanma</label>
+        <label class="radio-opt"><input type="radio" name="rq3"> Velayet / Nafaka</label>
+        <label class="radio-opt"><input type="radio" name="rq3"> Mal Paylaşımı</label>
+        <label class="radio-opt"><input type="radio" name="rq3"> Evlat Edinme</label>
+        <label class="radio-opt"><input type="radio" name="rq3"> Aile İçi Şiddet</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Evlilik Süresi</label>
+        <select><option disabled selected>Seçiniz</option><option>1 yıldan az</option><option>1–5 yıl</option><option>5–10 yıl</option><option>10 yıl üzeri</option></select>
+      </div>
+      <div class="form-group"><label>Çocuk Var mı?</label>
+        <select><option disabled selected>Seçiniz</option><option>Hayır</option><option>Evet – 1 çocuk</option><option>Evet – 2+ çocuk</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Aciliyet</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq3b"> Normal Süreç</label>
+        <label class="radio-opt"><input type="radio" name="rq3b"> Acil — Tehlike / Şiddet Var</label>
+      </div>
+    </div>`},
+
+  gayrimenkul:{icon:'🏠',badge:'Gayrimenkul Hukuku',title:'Gayrimenkul Talep Formu',sub:'16 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">MÜLKİYET BİLGİLERİ</div>
+    <div class="form-group"><label>Konu *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq4"> Tapu İptali / Tescil</label>
+        <label class="radio-opt"><input type="radio" name="rq4"> Kira Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq4"> Kat Mülkiyeti</label>
+        <label class="radio-opt"><input type="radio" name="rq4"> İmar / Ruhsat</label>
+        <label class="radio-opt"><input type="radio" name="rq4"> Kamulaştırma</label>
+        <label class="radio-opt"><input type="radio" name="rq4"> Müteahhit Uyuşmazlığı</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Mülk Türü</label>
+        <select><option disabled selected>Seçiniz</option><option>Konut</option><option>İş Yeri</option><option>Arsa / Tarla</option><option>Depo / Fabrika</option><option>Diğer</option></select>
+      </div>
+      <div class="form-group"><label>Tahmini Değer</label>
+        <select><option disabled selected>Seçiniz</option><option>1M TL'ye kadar</option><option>1–5M TL</option><option>5–20M TL</option><option>20M TL üzeri</option></select>
+      </div>
+    </div>`},
+
+  is:{icon:'👷',badge:'İş Hukuku',title:'İş Hukuku Talep Formu',sub:'15 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">BAŞVURU BİLGİSİ</div>
+    <div class="form-group"><label>Başvuru Yapan *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq5"> Çalışan / İşçi</label>
+        <label class="radio-opt"><input type="radio" name="rq5"> İşveren / Şirket</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Konu *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq5b"> İşe İade</label>
+        <label class="radio-opt"><input type="radio" name="rq5b"> Kıdem / İhbar Tazminatı</label>
+        <label class="radio-opt"><input type="radio" name="rq5b"> Mobbing</label>
+        <label class="radio-opt"><input type="radio" name="rq5b"> İş Kazası</label>
+        <label class="radio-opt"><input type="radio" name="rq5b"> SGK Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq5b"> Haksız Fesih</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>İşten Ayrılma Tarihi</label><input type="date"></div>
+      <div class="form-group"><label>Çalışma Süresi</label>
+        <select><option disabled selected>Seçiniz</option><option>1 yıldan az</option><option>1–5 yıl</option><option>5–10 yıl</option><option>10 yıl üzeri</option></select>
+      </div>
+    </div>`},
+
+  idare:{icon:'📋',badge:'İdare & Vergi Hukuku',title:'İdare & Vergi Talep Formu',sub:'12 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">BAŞVURU KONUSU</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq6"> Vergi Cezası / İtiraz</label>
+        <label class="radio-opt"><input type="radio" name="rq6"> İdari Para Cezası</label>
+        <label class="radio-opt"><input type="radio" name="rq6"> İhale Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq6"> Lisans / Ruhsat İptal</label>
+        <label class="radio-opt"><input type="radio" name="rq6"> Kamu Alacağı</label>
+        <label class="radio-opt"><input type="radio" name="rq6"> Memur Hukuku</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Ceza / Tutar (TL)</label><input type="number" placeholder="0"></div>
+      <div class="form-group"><label>İtiraz Süresi</label>
+        <select><option disabled selected>Seçiniz</option><option>Süre Dolmadı</option><option>Süre Yaklaşıyor (&lt;7 gün)</option><option>Süre Doldu</option></select>
+      </div>
+    </div>`},
+
+  bilisim:{icon:'💻',badge:'Bilişim & Siber Hukuku',title:'Bilişim Hukuku Talep Formu',sub:'9 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">KONU</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq7"> KVKK İhlali</label>
+        <label class="radio-opt"><input type="radio" name="rq7"> Siber Saldırı / Dolandırıcılık</label>
+        <label class="radio-opt"><input type="radio" name="rq7"> Sosyal Medya / Hakaret</label>
+        <label class="radio-opt"><input type="radio" name="rq7"> E-ticaret Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq7"> Veri İhlali Savunması</label>
+        <label class="radio-opt"><input type="radio" name="rq7"> Dijital Sözleşme</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Etkilenen Kişi Sayısı</label>
+      <select><option disabled selected>Seçiniz</option><option>Sadece Ben</option><option>1–10 Kişi</option><option>10–1000 Kişi</option><option>1000+ Kişi</option></select>
+    </div>`},
+
+  trafik:{icon:'🚗',badge:'Trafik & Sigorta Hukuku',title:'Trafik & Sigorta Talep Formu',sub:'10 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">KAZA / HASAR BİLGİLERİ</div>
+    <div class="form-group"><label>Başvuru Türü *</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq8"> Trafik Kazası Tazminatı</label>
+        <label class="radio-opt"><input type="radio" name="rq8"> Sigorta Reddi / İtiraz</label>
+        <label class="radio-opt"><input type="radio" name="rq8"> Kasko Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq8"> Beden Zararı / Maluliyet</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Kaza Tarihi</label><input type="date"></div>
+      <div class="form-group"><label>Sigorta Şirketi</label><input type="text" placeholder="Sigorta şirketi adı"></div>
+    </div>
+    <div class="form-group"><label>Yaralanma / Hasar Durumu</label>
+      <select><option disabled selected>Seçiniz</option><option>Sadece Maddi Hasar</option><option>Hafif Yaralanma</option><option>Ağır Yaralanma</option><option>Ölüm Olayı</option></select>
+    </div>`},
+
+  tahkim:{icon:'🌍',badge:'Uluslararası Tahkim',title:'Tahkim Talep Formu',sub:'8 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">TAHKİM BİLGİLERİ</div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Tahkim Kurumu</label>
+        <select><option disabled selected>Seçiniz</option><option>ICC (Uluslararası)</option><option>ICSID</option><option>UNCITRAL</option><option>İstanbul TAM</option><option>Diğer / Belirsiz</option></select>
+      </div>
+      <div class="form-group"><label>Uyuşmazlık Tutarı (USD)</label>
+        <select><option disabled selected>Seçiniz</option><option>1M USD'ye kadar</option><option>1–10M USD</option><option>10–100M USD</option><option>100M+ USD</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Karşı Taraf Ülkesi</label><input type="text" placeholder="Örn: Almanya, ABD, BAE..."></div>
+    <div class="form-group"><label>Sözleşme Dili</label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq9"> Türkçe</label>
+        <label class="radio-opt"><input type="radio" name="rq9"> İngilizce</label>
+        <label class="radio-opt"><input type="radio" name="rq9"> Diğer</label>
+      </div>
+    </div>`},
+
+  fikri:{icon:'💡',badge:'Fikri Mülkiyet Hukuku',title:'Fikri Mülkiyet Talep Formu',sub:'7 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">FİKRİ HAK TÜRÜ</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq10"> Marka Tescili / İhlali</label>
+        <label class="radio-opt"><input type="radio" name="rq10"> Patent Başvurusu / İhlali</label>
+        <label class="radio-opt"><input type="radio" name="rq10"> Telif Hakkı</label>
+        <label class="radio-opt"><input type="radio" name="rq10"> Endüstriyel Tasarım</label>
+        <label class="radio-opt"><input type="radio" name="rq10"> Coğrafi İşaret</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Tescil Durumu</label>
+        <select><option disabled selected>Seçiniz</option><option>Tescilsiz (Yeni başvuru)</option><option>Tescilli (İhlal var)</option><option>Başvuru Reddedildi</option><option>Marka Çakışması</option></select>
+      </div>
+      <div class="form-group"><label>Koruma Kapsamı</label>
+        <select><option disabled selected>Seçiniz</option><option>Türkiye</option><option>AB / Avrupa</option><option>Global / PCT</option></select>
+      </div>
+    </div>`},
+
+  enerji:{icon:'⚡',badge:'Enerji & Çevre Hukuku',title:'Enerji & Çevre Talep Formu',sub:'6 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">BAŞVURU KONUSU</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq11"> Enerji Lisansı / İzni</label>
+        <label class="radio-opt"><input type="radio" name="rq11"> Çevre Cezası</label>
+        <label class="radio-opt"><input type="radio" name="rq11"> ÇED Süreci</label>
+        <label class="radio-opt"><input type="radio" name="rq11"> Yenilenebilir Enerji Projesi</label>
+        <label class="radio-opt"><input type="radio" name="rq11"> EPDK / EMRA Uyuşmazlığı</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Proje / Tesis Türü</label>
+      <select><option disabled selected>Seçiniz</option><option>Güneş (Solar)</option><option>Rüzgar</option><option>Hidroelektrik</option><option>Doğalgaz</option><option>Nükleer</option><option>Diğer</option></select>
+    </div>`},
+
+  banka:{icon:'🏦',badge:'Banka & Finans Hukuku',title:'Banka & Finans Talep Formu',sub:'13 uzman avukat — ücretsiz ilk danışma',
+    html:`<div class="modal-sec-title">FİNANS KONUSU</div>
+    <div class="form-group">
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="rq12"> Kredi Uyuşmazlığı</label>
+        <label class="radio-opt"><input type="radio" name="rq12"> Yeniden Yapılandırma</label>
+        <label class="radio-opt"><input type="radio" name="rq12"> İflas / Konkordato</label>
+        <label class="radio-opt"><input type="radio" name="rq12"> Banka Kart / Dolandırıcılık</label>
+        <label class="radio-opt"><input type="radio" name="rq12"> Finansal Düzenleme</label>
+        <label class="radio-opt"><input type="radio" name="rq12"> SPK / BDDK Uyuşmazlığı</label>
+      </div>
+    </div>
+    <div class="fg-grid">
+      <div class="form-group"><label>Banka / Kurum Adı</label><input type="text" placeholder="Karşı taraf banka / kurum"></div>
+      <div class="form-group"><label>Borç / Alacak Tutarı</label>
+        <select><option disabled selected>Seçiniz</option><option>500K TL'ye kadar</option><option>500K – 5M TL</option><option>5M – 50M TL</option><option>50M TL üzeri</option></select>
+      </div>
+    </div>`}
+};
+
+/* OPEN MODAL */
+function openModal(key){
+  const d=CAT[key]; if(!d) return;
+  document.getElementById('mIcon').textContent=d.icon;
+  document.getElementById('mBadge').textContent=d.badge;
+  document.getElementById('mTitle').textContent=d.title;
+  document.getElementById('mSub').textContent=d.sub;
+  document.getElementById('mSpecific').innerHTML=d.html;
+  ['m_fname','m_lname','m_phone','m_email','m_city','m_notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m_meet').selectedIndex=0;
+  document.getElementById('m_privacy').checked=false;
+  document.getElementById('mErrorBox').innerHTML='';
+  document.getElementById('mSubmitBtn').style.display='block';
+  document.getElementById('mSuccessMsg').classList.remove('show');
+  document.getElementById('mSuccessMsg').style.display='none';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('modalBox').scrollTop=0;
+}
+
+/* CLOSE MODAL */
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* SUBMIT MODAL */
+function submitModal(){
+  const fn=document.getElementById('m_fname').value.trim();
+  const ln=document.getElementById('m_lname').value.trim();
+  const ph=document.getElementById('m_phone').value.trim();
+  const ci=document.getElementById('m_city').value.trim();
+  const pr=document.getElementById('m_privacy').checked;
+  const eb=document.getElementById('mErrorBox');
+  eb.innerHTML='';
+  if(!fn||!ln||!ph||!ci){eb.innerHTML='<div class="modal-error">⚠ Ad, Soyad, Telefon ve Şehir alanlarını doldurunuz.</div>';return;}
+  if(!pr){eb.innerHTML='<div class="modal-error">⚠ Gizlilik politikasını onaylamanız gerekmektedir.</div>';return;}
+  document.getElementById('mSubmitBtn').style.display='none';
+  const sm=document.getElementById('mSuccessMsg');sm.style.display='block';sm.classList.add('show');
+  setTimeout(closeModal,4500);
+}
+
+/* SUBMIT MAIN FORM */
+function submitMainForm(){
+  const fn=document.getElementById('mfname').value.trim();
+  const ln=document.getElementById('mflname').value.trim();
+  const ph=document.getElementById('mfphone').value.trim();
+  const em=document.getElementById('mfemail').value.trim();
+  const fi=document.getElementById('mffield').value;
+  const ms=document.getElementById('mfmessage').value.trim();
+  const pr=document.getElementById('mfprivacy').checked;
+  if(!fn||!ln||!ph||!em||!fi||!ms){alert('⚠️ Lütfen tüm zorunlu alanları doldurunuz.');return;}
+  if(!pr){alert('⚠️ Gizlilik politikasını onaylamanız gerekmektedir.');return;}
+  document.getElementById('mainFormContent').style.display='none';
+  document.getElementById('mainSuccess').classList.add('show');
+}
+</script>
+</body>
+</html>
