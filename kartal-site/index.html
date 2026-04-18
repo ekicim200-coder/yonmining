@@ -152,7 +152,7 @@ nav{
   position:absolute;inset:0;
   background-size:cover;background-position:center;width:100%;height:100%;
 }
-.ba-after{clip-path:inset(0 50% 0 0)}
+.ba-after{clip-path:inset(0 0 0 50%)}
 .ba-handle{
   position:absolute;top:0;bottom:0;
   left:50%;transform:translateX(-50%);
@@ -584,8 +584,8 @@ slides.forEach((_,i)=>{
 });
 function go(i){
   cur=i;
-  BA.style.backgroundImage=`url('${slides[i].after}')`;
-  BB.style.backgroundImage=`url('${slides[i].before}')`;
+  BB.style.backgroundImage=`url('${slides[i].after}')`;
+  BA.style.backgroundImage=`url('${slides[i].before}')`;
   document.querySelectorAll('.ba-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
   setH(50);
 }
@@ -596,7 +596,7 @@ let drag=false;
 function setH(p){
   p=Math.max(2,Math.min(98,p));
   BH.style.left=p+'%';
-  BB.style.clipPath=`inset(0 0 0 ${p}%)`;
+  BA.style.clipPath=`inset(0 0 0 ${p}%)`;
 }
 function gX(e){return e.touches?e.touches[0].clientX:e.clientX;}
 BH.addEventListener('mousedown',e=>{drag=true;e.preventDefault();});
